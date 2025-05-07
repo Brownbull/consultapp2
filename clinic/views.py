@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Appointment
 from .models import Doctor
 from .models import Patient
-from .permissions import IsDoctorOrReadOnly
+from .permissions import IsDoctorOrStaff
 from .serializers import AppointmentSerializer
 from .serializers import DoctorSerializer
 from .serializers import PatientSerializer
@@ -39,7 +39,7 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated, IsDoctorOrReadOnly]
+    permission_classes = [IsAuthenticated, IsDoctorOrStaff]
     queryset = Appointment.objects.none()
 
     # Search and filter setup

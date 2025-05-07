@@ -1,15 +1,11 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission
 
 
-class IsDoctorOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission: Allow doctors to view/edit only their own appointments.
-    """
+class IsDoctorOrStaff(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        # SAFE methods like GET are always allowed
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        # If user is a doctor and owns the object, allow edit
-        return hasattr(request.user, "doctor") and obj.doctor.user == request.user
+        if hasattr(request.user, "role"):
+            return request.user.role == "staff" or obj.doctor.user == request.user
+        return request.user.is_staff or obj.doctor.user == request.user
