@@ -26,6 +26,12 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    ROLE_CHOICES = (
+        ("doctor", "Doctor"),
+        ("staff", "Staff"),
+    )
+    role = CharField(max_length=10, choices=ROLE_CHOICES, default="doctor")
+
     objects: ClassVar[UserManager] = UserManager()
 
     def get_absolute_url(self) -> str:
